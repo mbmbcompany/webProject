@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import sk.bielik.webProject.entity.*;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
+    Customer findByNickName(String nickName);
 }

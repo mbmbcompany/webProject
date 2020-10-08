@@ -2,13 +2,11 @@ package sk.bielik.webProject.controller.restConroller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sk.bielik.webProject.entityDto.*;
 import sk.bielik.webProject.service.serviceImpl.*;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -32,5 +30,20 @@ public class CustomerRestController {
         CustomerWithoutPasswordDto customerWithoutPasswordDto =customerService.getCustomerById(id);
         return new ResponseEntity(customerWithoutPasswordDto,HttpStatus.OK);
     }
+
+    @GetMapping("/onlineCustomers")
+    public ResponseEntity getOnlineCustomers(){
+
+        List<CustomerWithoutPasswordDto> customerWithoutPasswordDtoList=customerService.getOnlineCustomers();
+        return new ResponseEntity(customerWithoutPasswordDtoList,HttpStatus.OK);
+
+    }
+
+//    @GetMapping("/onlineCustomers")
+//    public ResponseEntity getOnlineCustomerByNickNameApi(@RequestParam("nickName") String nickName){
+//        CustomerWithoutPasswordDto customerWithoutPasswordDto=customerService.getOnlineCustomerByNickName(nickName);
+//        return new ResponseEntity(customerWithoutPasswordDto,HttpStatus.OK);
+//    }
+
 
 }

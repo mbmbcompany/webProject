@@ -1,7 +1,9 @@
 package sk.bielik.webProject.entityDto;
 
-public class CustomerWithoutPasswordDto {
+import org.springframework.lang.Nullable;
 
+public class CustomerWithoutPasswordDto {
+    @Nullable
     private long id;
 
     private String name;
@@ -70,5 +72,18 @@ public class CustomerWithoutPasswordDto {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerWithoutPasswordDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surename='" + surename + '\'' +
+                ", email='" + email + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                ", adress='" + adress + '\'' +
+                ", nickName='" + nickName + '\'' +
+                '}';
     }
 }

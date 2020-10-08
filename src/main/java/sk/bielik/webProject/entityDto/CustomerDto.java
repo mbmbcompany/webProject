@@ -1,7 +1,9 @@
 package sk.bielik.webProject.entityDto;
 
-public class CustomerDto {
+import org.springframework.lang.Nullable;
 
+public class CustomerDto {
+    @Nullable
     private long id;
 
     private String name;

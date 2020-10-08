@@ -27,4 +27,8 @@ public class CustomerRepositoryImpl {
     public Customer saveCustomer(Customer customer){
         return customerRepository.save(customer);
     }
+
+    public Customer getCustomerByNickName(String nickName) {
+        return customerRepository.findByNickName(nickName);
+    }
 }

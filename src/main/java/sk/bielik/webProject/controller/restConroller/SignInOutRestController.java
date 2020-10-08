@@ -1,32 +1,23 @@
 package sk.bielik.webProject.controller.restConroller;
 
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import sk.bielik.webProject.service.serviceImpl.SignInServiceImpl;
+import org.springframework.web.bind.annotation.*;
+import sk.bielik.webProject.service.serviceImpl.SignInOutServiceImpl;
 import sk.bielik.webProject.request.*;
 import sk.bielik.webProject.response.*;
 
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
-
 @RestController
-@RequestMapping("/signIn")
-public class SignInRestController {
+@RequestMapping("/sign")
+public class SignInOutRestController {
 
-    private final SignInServiceImpl signInService;
+    private final SignInOutServiceImpl signInService;
 
-    public SignInRestController(SignInServiceImpl signInService) {
+    public SignInOutRestController(SignInOutServiceImpl signInService) {
         this.signInService = signInService;
     }
 
-    @PostMapping
+    @PostMapping("/in")
     public ResponseEntity signIn(@RequestBody SignInRequest signInRequest){
         SignInResponse signInResponse=signInService.signIn(signInRequest);
 
@@ -46,5 +37,11 @@ public class SignInRestController {
         }else {
             return new ResponseEntity(signInResponse.getMessage()+" "+signInResponse.getWebPage(),HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping("/out")
+    public ResponseEntity signOut(){
+       SignInResponse signInResponse= signInService.signOut();
+        return new ResponseEntity(signInResponse.getMessage(),HttpStatus.OK);
     }
 }
