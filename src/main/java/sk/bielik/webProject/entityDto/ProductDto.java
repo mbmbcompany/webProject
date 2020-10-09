@@ -1,23 +1,14 @@
-package sk.bielik.webProject.entity;
+package sk.bielik.webProject.entityDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import sk.bielik.webProject.entity.enums.ProductGroup;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDto {
+
     private long id;
 
-    private String name;
+    private String title;
 
     private BigDecimal price;
 
@@ -27,7 +18,7 @@ public class Product {
 
     private ProductGroup productGroup;
 
-    public Product() {
+    public ProductDto() {
     }
 
     public long getId() {
@@ -38,12 +29,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public BigDecimal getPrice() {

@@ -1,5 +1,6 @@
 package sk.bielik.webProject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -9,16 +10,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import sk.bielik.webProject.entity.enums.ProductGroup;
 import sk.bielik.webProject.entityDto.CustomerDto;
 import sk.bielik.webProject.entityDto.CustomerWithoutPasswordDto;
+import sk.bielik.webProject.entityDto.ProductDto;
 import sk.bielik.webProject.request.RegistrationRequest;
 import sk.bielik.webProject.request.SignInRequest;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -74,5 +79,54 @@ public class RestApiControllerTest {
 //        String returnedOutResponse=mockMvc.perform(get("/sign/out").
 //                contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
 //                andReturn().getResponse().getContentAsString();
+    }
+
+    @Test
+    public void testAddProductGetProductsUpdateProductDeleteProduct() throws Exception {
+        //addProduct
+        ProductDto productDto=new ProductDto();
+        productDto.setTitle("Test");
+        productDto.setProductGroup(ProductGroup.ELECTRO);
+        productDto.setPrice(new BigDecimal(20));
+        productDto.setNumberOfPiecesInStock(40);
+        productDto.setDescription("Test");
+        String addResult=mockMvc.perform(post("/products/addProduct").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(productDto))).
+                andExpect(status().isCreated()).andReturn().getResponse().
+                getContentAsString();
+        ProductDto returnedProductDto=objectMapper.readValue(addResult,ProductDto.class);
+        Assertions.assertEquals(productDto.getTitle(),returnedProductDto.getTitle());
+        //getProduct
+        String getResult=mockMvc.perform(get("/products").
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).andReturn().
+                getResponse().getContentAsString();
+        String getResultWithId=mockMvc.perform(get("/products?id=1").
+                contentType(MediaType.APPLICATION_JSON)).
+                andExpect(status().isOk()).andReturn().
+                getResponse().getContentAsString();
+        List<ProductDto> productDtos=objectMapper.readValue(getResult, new TypeReference<List<ProductDto>>() {});
+        ProductDto productDto1=objectMapper.readValue(getResultWithId,ProductDto.class);
+        Assertions.assertEquals(returnedProductDto.getId(),productDtos.get(0).getId());
+        Assertions.assertEquals(productDtos.get(0).getId(),productDto1.getId());
+        //updateProduct
+
+        ProductDto productDto2=new ProductDto();
+        productDto2.setDescription("Test2");
+        productDto2.setNumberOfPiecesInStock(100);
+        productDto2.setPrice(new BigDecimal(100));
+        productDto2.setProductGroup(ProductGroup.FURNITURE);
+        productDto2.setTitle("Test2");
+        String updateResult=mockMvc.perform(MockMvcRequestBuilders.put("/products/updateProduct?id=1").
+                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productDto2))).
+                andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        ProductDto updatedProduct=objectMapper.readValue(updateResult,ProductDto.class);
+        Assertions.assertEquals(productDto2.getTitle(),updatedProduct.getTitle());
+        //deleteProduct
+        String deleteProduct=mockMvc.perform(delete("/products/delete/1").
+                contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
+                andReturn().getResponse().getContentAsString();
+        Assertions.assertEquals("Product with id:1 was successfully deleted. ",deleteProduct);
     }
 }

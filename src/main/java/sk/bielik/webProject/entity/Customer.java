@@ -35,6 +35,9 @@ public class Customer {
 
     private String nickName;
 
+    public Customer() {
+    }
+
     public long getId() {
         return id;
     }
