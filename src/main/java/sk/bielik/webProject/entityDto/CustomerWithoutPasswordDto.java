@@ -1,6 +1,7 @@
 package sk.bielik.webProject.entityDto;
 
 import org.springframework.lang.Nullable;
+import sk.bielik.webProject.entity.Trolley;
 
 public class CustomerWithoutPasswordDto {
     @Nullable
@@ -17,6 +18,8 @@ public class CustomerWithoutPasswordDto {
     private String adress;
 
     private String nickName;
+
+    private Trolley trolley;
 
     public long getId() {
         return id;
@@ -72,6 +75,14 @@ public class CustomerWithoutPasswordDto {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Trolley getTrolley() {
+        return trolley;
+    }
+
+    public void setTrolley(Trolley trolley) {
+        this.trolley = trolley;
     }
 
     @Override

@@ -15,4 +15,6 @@ public interface ProductService {
     void deleteProductById(long id);
 
     ProductDto updateProduct(long id,ProductDto productDto);
+
+    List<ProductDto> getAllProductsOrderedByPrice(boolean fromHighest);
 }

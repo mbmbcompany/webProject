@@ -20,7 +20,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity getProducts(@Nullable @RequestParam("id") Long id){
+    public ResponseEntity getProducts(@Nullable @RequestParam(value = "id",required = false) Long id){
         if (id==null){
         List<ProductDto> productDtos=productService.getAllProducts();
         return new ResponseEntity(productDtos, HttpStatus.OK);
@@ -46,6 +46,12 @@ public class ProductRestController {
     public ResponseEntity deleteProduct(@PathVariable("id")Long id){
         productService.deleteProductById(id);
         return new ResponseEntity("Product with id:"+id+" was successfully deleted. ",HttpStatus.OK);
+    }
+
+    @GetMapping("/priceOrdered")
+    public ResponseEntity getAllProductsOrdered(@RequestParam(value = "fromLowest",required = true) boolean fromLowest){
+        List<ProductDto> productDtos=productService.getAllProductsOrderedByPrice(fromLowest);
+        return new ResponseEntity(productDtos,HttpStatus.OK);
     }
 
 

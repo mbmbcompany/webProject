@@ -3,10 +3,16 @@ package sk.bielik.webProject.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sk.bielik.webProject.converter.ProductGroupConverter;
 import sk.bielik.webProject.entity.enums.ProductGroup;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,8 +30,12 @@ public class Product {
     private long numberOfPiecesInStock;
 
     private String description;
-
+    @Convert(converter = ProductGroupConverter.class)
     private ProductGroup productGroup;
+
+    private Timestamp addedToTrolley;
+    @ManyToMany(mappedBy = "productList")
+    private Set<Trolley> trolleyList=new HashSet<>();
 
     public Product() {
     }
@@ -76,5 +86,13 @@ public class Product {
 
     public void setProductGroup(ProductGroup productGroup) {
         this.productGroup = productGroup;
+    }
+
+    public Timestamp getAddedToTrolley() {
+        return addedToTrolley;
+    }
+
+    public void setAddedToTrolley(Timestamp addedToTrolley) {
+        this.addedToTrolley = addedToTrolley;
     }
 }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 
@@ -34,6 +31,8 @@ public class Customer {
     private String adress;
 
     private String nickName;
+    @OneToOne
+    private Trolley trolley=new Trolley();
 
     public Customer() {
     }

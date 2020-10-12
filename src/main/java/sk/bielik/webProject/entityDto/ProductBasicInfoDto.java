@@ -1,17 +1,16 @@
 package sk.bielik.webProject.entityDto;
 
-import sk.bielik.webProject.entity.Trolley;
+import sk.bielik.webProject.converter.ProductGroupConverter;
 import sk.bielik.webProject.entity.enums.ProductGroup;
 
+import javax.persistence.Convert;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Set;
 
-public class ProductDto {
+public class ProductBasicInfoDto {
 
     private long id;
 
-    private String title;
+    private String name;
 
     private BigDecimal price;
 
@@ -21,11 +20,7 @@ public class ProductDto {
 
     private ProductGroup productGroup;
 
-    private Timestamp addedToTrolley;
-
-    private Set<Trolley> trolleyList;
-
-    public ProductDto() {
+    public ProductBasicInfoDto() {
     }
 
     public long getId() {
@@ -36,12 +31,12 @@ public class ProductDto {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getPrice() {
@@ -74,21 +69,5 @@ public class ProductDto {
 
     public void setProductGroup(ProductGroup productGroup) {
         this.productGroup = productGroup;
-    }
-
-    public Timestamp getAddedToTrolley() {
-        return addedToTrolley;
-    }
-
-    public void setAddedToTrolley(Timestamp addedToTrolley) {
-        this.addedToTrolley = addedToTrolley;
-    }
-
-    public Set<Trolley> getTrolleyList() {
-        return trolleyList;
-    }
-
-    public void setTrolleyList(Set<Trolley> trolleyList) {
-        this.trolleyList = trolleyList;
     }
 }
