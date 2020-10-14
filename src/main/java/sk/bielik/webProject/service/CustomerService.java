@@ -1,6 +1,7 @@
 package sk.bielik.webProject.service;
 
 import sk.bielik.webProject.entity.Customer;
+import sk.bielik.webProject.entity.Product;
 import sk.bielik.webProject.entityDto.*;
 
 

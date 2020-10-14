@@ -36,4 +36,13 @@ public class AddProductToTrolleyRequest {
     public void setNumberOfProducts(long numberOfProducts) {
         this.numberOfProducts = numberOfProducts;
     }
+
+    @Override
+    public String toString() {
+        return "AddProductToTrolleyRequest{" +
+                "customerId=" + customerId +
+                ", productId=" + productId +
+                ", numberOfProducts=" + numberOfProducts +
+                '}';
+    }
 }

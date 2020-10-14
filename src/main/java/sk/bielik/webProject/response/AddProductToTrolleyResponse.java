@@ -1,5 +1,7 @@
 package sk.bielik.webProject.response;
 
+import javax.servlet.http.HttpServletResponse;
+
 public class AddProductToTrolleyResponse {
 
     private boolean success;
@@ -40,4 +42,5 @@ public class AddProductToTrolleyResponse {
     public void setWebPage(String webPage) {
         this.webPage = webPage;
     }
+
 }

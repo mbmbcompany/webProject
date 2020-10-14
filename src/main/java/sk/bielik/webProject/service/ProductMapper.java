@@ -15,7 +15,7 @@ public interface ProductMapper {
     @Mapping(source ="title",target = "name")
     ProductBasicInfoDto mapProductDtoToProductBasicInfoDto(ProductDto productDto);
     @Mapping(source = "name",target = "title")
-    ProductDto mapProductToProductDto(ProductBasicInfoDto productBasicInfoDto);
+    ProductDto mapProductBasicInfoDtoToProductDto(ProductBasicInfoDto productBasicInfoDto);
 
     Product mapProductBasicInfoDtoToProduct(ProductBasicInfoDto productBasicInfoDto);
 

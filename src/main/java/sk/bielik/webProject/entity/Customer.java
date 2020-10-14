@@ -31,8 +31,8 @@ public class Customer {
     private String adress;
 
     private String nickName;
-    @OneToOne
-    private Trolley trolley=new Trolley();
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    private Trolley trolley;
 
     public Customer() {
     }
@@ -99,5 +99,13 @@ public class Customer {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Trolley getTrolley() {
+        return trolley;
+    }
+
+    public void setTrolley(Trolley trolley) {
+        this.trolley = trolley;
     }
 }

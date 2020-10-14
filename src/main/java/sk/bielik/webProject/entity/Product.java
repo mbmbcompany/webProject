@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,12 +30,14 @@ public class Product {
     private long numberOfPiecesInStock;
 
     private String description;
+
     @Convert(converter = ProductGroupConverter.class)
     private ProductGroup productGroup;
 
     private Timestamp addedToTrolley;
-    @ManyToMany(mappedBy = "productList")
-    private Set<Trolley> trolleyList=new HashSet<>();
+
+    @ManyToMany(mappedBy = "productList",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Trolley> trolleyList=new ArrayList<>();
 
     public Product() {
     }
@@ -94,5 +96,13 @@ public class Product {
 
     public void setAddedToTrolley(Timestamp addedToTrolley) {
         this.addedToTrolley = addedToTrolley;
+    }
+
+    public List<Trolley> getTrolleyList() {
+        return trolleyList;
+    }
+
+    public void setTrolleyList(List<Trolley> trolleyList) {
+        this.trolleyList = trolleyList;
     }
 }

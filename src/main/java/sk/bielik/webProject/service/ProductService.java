@@ -1,20 +1,23 @@
 package sk.bielik.webProject.service;
 
+import sk.bielik.webProject.entityDto.ProductBasicInfoDto;
 import sk.bielik.webProject.entityDto.ProductDto;
 
 import java.util.List;
 
 public interface ProductService {
 
-    ProductDto addProduct(ProductDto productDto);
+    ProductBasicInfoDto addProduct(ProductDto productDto);
 
-    ProductDto getProductById(long id);
+    ProductBasicInfoDto getProductById(long id);
 
-    List<ProductDto> getAllProducts();
+    ProductDto getProductDtoById(long id);
+
+    List<ProductBasicInfoDto> getAllProducts();
 
     void deleteProductById(long id);
 
-    ProductDto updateProduct(long id,ProductDto productDto);
+    ProductDto updateProduct(long id, ProductDto productDto);
 
-    List<ProductDto> getAllProductsOrderedByPrice(boolean fromHighest);
+    List<ProductBasicInfoDto> getAllProductsOrderedByPrice(boolean fromHighest);
 }

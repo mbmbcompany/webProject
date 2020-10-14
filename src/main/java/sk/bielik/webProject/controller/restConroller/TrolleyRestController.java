@@ -2,13 +2,13 @@ package sk.bielik.webProject.controller.restConroller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sk.bielik.webProject.request.AddProductToTrolleyRequest;
 import sk.bielik.webProject.response.AddProductToTrolleyResponse;
 import sk.bielik.webProject.service.serviceImpl.TrolleyServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/trolley")
@@ -21,8 +21,8 @@ public class TrolleyRestController {
     }
 
     @PostMapping
-    public ResponseEntity addProductToTrolley(@RequestBody AddProductToTrolleyRequest addProductToTrolleyRequest){
-        AddProductToTrolleyResponse addProductToTrolleyResponse=trolleyService.addProductToTrolley(addProductToTrolleyRequest);
+    public ResponseEntity addProductToTrolley(HttpServletRequest request, HttpServletResponse response, @RequestBody AddProductToTrolleyRequest addProductToTrolleyRequest){
+        AddProductToTrolleyResponse addProductToTrolleyResponse=trolleyService.addProductToTrolley(addProductToTrolleyRequest,request,response);
         return new ResponseEntity(addProductToTrolleyResponse, HttpStatus.OK);
     }
 }

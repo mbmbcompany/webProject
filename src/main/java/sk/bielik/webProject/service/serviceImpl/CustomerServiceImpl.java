@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import sk.bielik.webProject.entity.Customer;
 import sk.bielik.webProject.entityDto.CustomerWithoutPasswordDto;
 import sk.bielik.webProject.entityDto.CustomerDto;
+import sk.bielik.webProject.entityDto.ProductDto;
 import sk.bielik.webProject.repository.repositoryImp.CustomerRepositoryImpl;
 import sk.bielik.webProject.repository.repositoryImp.OnlineCustomersRepositoryImpl;
 import sk.bielik.webProject.service.CustomerMapperImpl;
@@ -91,4 +92,5 @@ public class CustomerServiceImpl implements CustomerService {
                 mapCustomerToCustomerWithoutPasswordDto(onlineCustomersRepository
                         .getOnlineCustomerByStringId(customer.getId()+""));
     }
+
 }

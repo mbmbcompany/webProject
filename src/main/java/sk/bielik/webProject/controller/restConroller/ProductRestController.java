@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import sk.bielik.webProject.entityDto.ProductBasicInfoDto;
 import sk.bielik.webProject.entityDto.ProductDto;
 import sk.bielik.webProject.service.serviceImpl.ProductServiceImpl;
 
@@ -22,22 +23,22 @@ public class ProductRestController {
     @GetMapping
     public ResponseEntity getProducts(@Nullable @RequestParam(value = "id",required = false) Long id){
         if (id==null){
-        List<ProductDto> productDtos=productService.getAllProducts();
+        List<ProductBasicInfoDto> productDtos=productService.getAllProducts();
         return new ResponseEntity(productDtos, HttpStatus.OK);
         }else {
-            ProductDto productDto=productService.getProductById(id);
+            ProductBasicInfoDto productDto=productService.getProductById(id);
             return new ResponseEntity(productDto,HttpStatus.OK);
         }
     }
 
     @PostMapping("/addProduct")
     public ResponseEntity addProduct(@RequestBody ProductDto productDto){
-        ProductDto productDto1=productService.addProduct(productDto);
+        ProductBasicInfoDto productDto1=productService.addProduct(productDto);
         return new ResponseEntity(productDto1,HttpStatus.CREATED);
     }
 
     @PutMapping("/updateProduct")
-    public ResponseEntity updateProduct(@RequestBody ProductDto productDto,@RequestParam("id") Long id){
+    public ResponseEntity updateProduct(@RequestBody ProductDto productDto, @RequestParam("id") Long id){
         ProductDto productDto1=productService.updateProduct(id,productDto);
         return new ResponseEntity(productDto1,HttpStatus.OK);
     }
@@ -50,7 +51,7 @@ public class ProductRestController {
 
     @GetMapping("/priceOrdered")
     public ResponseEntity getAllProductsOrdered(@RequestParam(value = "fromLowest",required = true) boolean fromLowest){
-        List<ProductDto> productDtos=productService.getAllProductsOrderedByPrice(fromLowest);
+        List<ProductBasicInfoDto> productDtos=productService.getAllProductsOrderedByPrice(fromLowest);
         return new ResponseEntity(productDtos,HttpStatus.OK);
     }
 

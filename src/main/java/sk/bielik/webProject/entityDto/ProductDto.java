@@ -5,6 +5,7 @@ import sk.bielik.webProject.entity.enums.ProductGroup;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProductDto {
@@ -23,7 +24,7 @@ public class ProductDto {
 
     private Timestamp addedToTrolley;
 
-    private Set<Trolley> trolleyList;
+    private Set<Trolley> trolleyList=new HashSet<>();
 
     public ProductDto() {
     }

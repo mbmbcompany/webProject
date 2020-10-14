@@ -1,6 +1,7 @@
 package sk.bielik.webProject.service.serviceImpl;
 
 import org.springframework.stereotype.Service;
+import sk.bielik.webProject.entity.Trolley;
 import sk.bielik.webProject.entityDto.*;
 import sk.bielik.webProject.request.*;
 import sk.bielik.webProject.response.*;
@@ -61,7 +62,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             return new RegistrationResponse(false,"Error","Sending registration web page.");
         }
         if (calcul<1){
-            customerService.saveCustomer(registrationRequest.getCustomerDto());
+            Trolley trolley=new Trolley();
+            CustomerDto customerDto=registrationRequest.getCustomerDto();
+            customerDto.setTrolley(trolley);
+            customerService.saveCustomer(customerDto);
             return new RegistrationResponse(true,"Hello "+registrationRequest.getCustomerDto().getNickName()+" ,you have been successfully registered","Sending main web page.");
         }
 
