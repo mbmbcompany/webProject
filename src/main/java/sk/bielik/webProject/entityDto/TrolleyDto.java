@@ -1,16 +1,20 @@
 package sk.bielik.webProject.entityDto;
 
+import sk.bielik.webProject.entity.Customer;
 import sk.bielik.webProject.entity.Product;
 
-import javax.persistence.ManyToMany;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrolleyDto {
 
     long id;
 
-    private Set<Product> productList=new HashSet<>();
+    private List<Product> product =new ArrayList<>();
+
+    private Customer customer;
+
 
     public TrolleyDto() {
     }
@@ -23,11 +27,20 @@ public class TrolleyDto {
         this.id = id;
     }
 
-    public Set<Product> getProductList() {
-        return productList;
+    public List<Product> getProduct() {
+        return product;
     }
 
-    public void setProductList(Set<Product> productList) {
-        this.productList = productList;
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 }

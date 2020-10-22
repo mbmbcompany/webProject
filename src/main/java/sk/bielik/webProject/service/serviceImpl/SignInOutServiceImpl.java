@@ -3,7 +3,7 @@ package sk.bielik.webProject.service.serviceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import sk.bielik.webProject.entity.Customer;
-import sk.bielik.webProject.entityDto.CustomerWithoutPasswordDto;
+import sk.bielik.webProject.entityDto.CustomerDto;
 import sk.bielik.webProject.repository.repositoryImp.CustomerRepositoryImpl;
 import sk.bielik.webProject.request.SignInRequest;
 import sk.bielik.webProject.response.SignInResponse;
@@ -62,11 +62,11 @@ public class SignInOutServiceImpl implements SignInOutService {
             }
 
             if (calcul == 1) {
-                // session.setAttribute("userNickName",signInRequest.getNickName());
-                CustomerWithoutPasswordDto customerWithoutPasswordDto = customerService.addOnlineCustomer(id, result);
+                session.setAttribute("userNickName",signInRequest.getNickName());
+                CustomerDto customerWithoutPasswordDto = customerService.addOnlineCustomer(id, result);
                 if (customerWithoutPasswordDto != null) {
                     System.out.println("You are signed in as " + signInRequest.getNickName());
-                    return new SignInResponse(true, "Hello " + customerWithoutPasswordDto.getNickName() + " . You signed in successfully", "Sending you main webpage.");
+                    return new SignInResponse(true, "Hello " + session.getAttribute("userNickName") + " . You signed in successfully", "Sending you main webpage.");
                 } else {
                     return new SignInResponse(false, "NullPointer Exception", "Sending sign in web page.");
                 }
@@ -100,7 +100,7 @@ public class SignInOutServiceImpl implements SignInOutService {
     @Override
     public SignInResponse signOut() {
         if (session.getAttribute("userNickName")!=null) {
-            CustomerWithoutPasswordDto customerWithoutPasswordDto= customerService.getCustomerByNickName(session.getAttribute("userNickName").toString());
+            CustomerDto customerWithoutPasswordDto= customerService.getCustomerByNickName(session.getAttribute("userNickName").toString());
             customerService.deleteOnlineCustomerByStringId(customerWithoutPasswordDto.getId()+"");
             session.invalidate();
             return new SignInResponse(true, "You were successfully signed out", "Sending sign in web page");

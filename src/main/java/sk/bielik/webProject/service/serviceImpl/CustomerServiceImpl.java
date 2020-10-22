@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import sk.bielik.webProject.entity.Customer;
 import sk.bielik.webProject.entityDto.CustomerWithoutPasswordDto;
 import sk.bielik.webProject.entityDto.CustomerDto;
-import sk.bielik.webProject.entityDto.ProductDto;
 import sk.bielik.webProject.repository.repositoryImp.CustomerRepositoryImpl;
 import sk.bielik.webProject.repository.repositoryImp.OnlineCustomersRepositoryImpl;
 import sk.bielik.webProject.service.CustomerMapperImpl;
@@ -33,8 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerWithoutPasswordDto getCustomerById(Long customerId) {
-        return customerMapper.mapCustomerToCustomerWithoutPasswordDto(customerRepository.getCustomerById(customerId));
+    public CustomerDto getCustomerById(Long customerId) {
+        return customerMapper.mapCustomerToCustomerDto(customerRepository.getCustomerById(customerId));
     }
 
     @Override
@@ -45,22 +44,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerWithoutPasswordDto saveCustomer(CustomerDto customerDto) {
+    public CustomerDto saveCustomer(CustomerDto customerDto) {
         return customerMapper.
-                mapCustomerToCustomerWithoutPasswordDto
+                mapCustomerToCustomerDto
                         (customerRepository.saveCustomer
                                 (customerMapper.mapCustomerDtoToCustomer(customerDto)));
     }
 
     @Override
-    public CustomerWithoutPasswordDto addOnlineCustomer(long id, Customer customer) {
+    public CustomerDto addOnlineCustomer(long id, Customer customer) {
         session.setAttribute("userNickName",customer.getNickName());
         onlineCustomersRepository.addOnlineCustomer(""+id,customer);
-        CustomerWithoutPasswordDto customerWithoutPasswordDto=
-                customerMapper.mapCustomerToCustomerWithoutPasswordDto
+        CustomerDto customerDto=
+                customerMapper.mapCustomerToCustomerDto
                         (onlineCustomersRepository.
                                 getOnlineCustomerByStringId(""+id));
-        return customerWithoutPasswordDto;
+        return customerDto;
     }
 
     public List<CustomerWithoutPasswordDto> getOnlineCustomers() {
@@ -70,8 +69,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerWithoutPasswordDto getOnlineCustomerByStringId(String id) {
-        return customerMapper.mapCustomerToCustomerWithoutPasswordDto(onlineCustomersRepository.getOnlineCustomerByStringId(id));
+    public CustomerDto getOnlineCustomerByStringId(String id) {
+        return customerMapper.mapCustomerToCustomerDto(onlineCustomersRepository.getOnlineCustomerByStringId(id));
     }
 
     @Override
@@ -80,16 +79,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerWithoutPasswordDto getCustomerByNickName(String userNickName) {
-        return customerMapper.mapCustomerToCustomerWithoutPasswordDto(customerRepository.getCustomerByNickName(userNickName));
+    public CustomerDto getCustomerByNickName(String userNickName) {
+        return customerMapper.mapCustomerToCustomerDto(customerRepository.getCustomerByNickName(userNickName));
     }
 
     @Override
-    public CustomerWithoutPasswordDto addOnlineCustomerWithActiveSessionToOnlineCustomers(String userNickName) {
+    public CustomerDto addOnlineCustomerWithActiveSessionToOnlineCustomers(String userNickName) {
       Customer customer= customerRepository.getCustomerByNickName(userNickName);
       onlineCustomersRepository.addOnlineCustomer(customer.getId()+"",customer);
         return customerMapper.
-                mapCustomerToCustomerWithoutPasswordDto(onlineCustomersRepository
+                mapCustomerToCustomerDto(onlineCustomersRepository
                         .getOnlineCustomerByStringId(customer.getId()+""));
     }
 

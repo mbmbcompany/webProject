@@ -3,38 +3,55 @@ package sk.bielik.webProject.repository.repositoryImp;
 import org.springframework.stereotype.Repository;
 import sk.bielik.webProject.entity.Customer;
 import sk.bielik.webProject.entity.Product;
+import sk.bielik.webProject.entity.Trolley;
+import sk.bielik.webProject.entity.TrolleyItem;
 import sk.bielik.webProject.repository.CustomerRepository;
 import sk.bielik.webProject.repository.TrolleyRepository;
-import sk.bielik.webProject.response.AddProductToTrolleyResponse;
 
 import java.util.List;
 @Repository
-public class TrolleyRepositoryImpl implements TrolleyRepository {
+public class TrolleyRepositoryImpl{
 
     private final CustomerRepository customerRepository;
 
-    public TrolleyRepositoryImpl(CustomerRepository customerRepository) {
+    private final TrolleyRepository trolleyRepository;
+
+    public TrolleyRepositoryImpl(CustomerRepository customerRepository, TrolleyRepository trolleyRepository) {
         this.customerRepository = customerRepository;
+        this.trolleyRepository = trolleyRepository;
     }
 
-    @Override
-    public Customer addProductToTrolley(Customer customer, Product product) {
-        customer.getTrolley().getProductList().add(product);
+
+    public Customer addProductToTrolley(Customer customer, Product product,long numberOfProducts) {
+      //  product.getTrolleyList().add(customer.getTrolley());
+        TrolleyItem trolleyItem=new TrolleyItem();
+        trolleyItem.setTrolley(customer.getTrolley());
+        trolleyItem.setProduct(product);
+        trolleyItem.setNumberOfPieces(numberOfProducts);
+        customer.getTrolley().getTrolleyItems().add(trolleyItem);
         return customerRepository.save(customer);
     }
 
-    @Override
-    public void deleteProductFromTrolley(long productId, long numberOfProducts) {
 
+    public void deleteProductFromTrolley(Customer customer,TrolleyItem trolleyItem) {
+        List<TrolleyItem> productList=customer.getTrolley().getTrolleyItems();
+        productList.remove(trolleyItem);
     }
 
-    @Override
-    public List<Product> buyProducts() {
-        return null;
+
+    public boolean buyProducts(Customer customer) {
+        List<TrolleyItem> productList=customer.getTrolley().getTrolleyItems();
+        boolean success=productList.removeAll(productList);
+        return success;
     }
 
-    @Override
-    public List<Product> getAllProductsFromTrolley() {
-        return null;
+
+    public List<TrolleyItem> getAllProductsFromTrolley(Customer customer) {
+        return customer.getTrolley().getTrolleyItems();
+    }
+
+
+    public Trolley addTrolleyToDatabase(Trolley trolley) {
+        return trolleyRepository.addTrolleyToDatabase(trolley);
     }
 }

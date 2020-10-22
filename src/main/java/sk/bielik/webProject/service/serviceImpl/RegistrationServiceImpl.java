@@ -18,9 +18,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final CustomerMapperImpl customerMapper;
 
-    public RegistrationServiceImpl(CustomerServiceImpl customerService, CustomerMapperImpl customerMapper) {
+    private final TrolleyServiceImpl trolleyService;
+
+    private final TrolleyMapperImpl trolleyMapper;
+
+    public RegistrationServiceImpl(CustomerServiceImpl customerService, CustomerMapperImpl customerMapper, TrolleyServiceImpl trolleyService, TrolleyMapperImpl trolleyMapper) {
         this.customerService = customerService;
         this.customerMapper = customerMapper;
+        this.trolleyService = trolleyService;
+        this.trolleyMapper = trolleyMapper;
     }
 
     @Override
@@ -63,9 +69,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         if (calcul<1){
             Trolley trolley=new Trolley();
+            TrolleyDto trolleyDto=trolleyService.addTrolleyToDatabase(trolleyMapper.mapTrolleyToTrolleyDto(trolley));
             CustomerDto customerDto=registrationRequest.getCustomerDto();
+            //customerService.saveCustomer(customerDto);
+           // CustomerDto customerDto1=customerService.saveCustomer(customerDto);
+
+            trolleyDto.setCustomer(customerMapper.mapCustomerDtoToCustomer(customerDto));
+            //trolleyService.addTrolleyToDatabase(trolleyMapper.mapTrolleyToTrolleyDto(trolley));
             customerDto.setTrolley(trolley);
             customerService.saveCustomer(customerDto);
+
+
             return new RegistrationResponse(true,"Hello "+registrationRequest.getCustomerDto().getNickName()+" ,you have been successfully registered","Sending main web page.");
         }
 

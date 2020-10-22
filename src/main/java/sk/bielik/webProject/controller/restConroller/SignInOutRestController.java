@@ -20,18 +20,6 @@ public class SignInOutRestController {
     @PostMapping("/in")
     public ResponseEntity signIn(@RequestBody SignInRequest signInRequest){
         SignInResponse signInResponse=signInService.signIn(signInRequest);
-
-//        if (  session.getAttribute("userNickName")==null){
-//        if (signInResponse.isSuccess()){
-//            session.setAttribute("userNickName",signInRequest.getNickName());
-//            System.out.println("You are signed in as "+signInRequest.getNickName());
-//        }
-//        }else {
-//            System.out.println
-//                    ("Hello "+session.getAttribute("userNickName")+
-//                            " ,you dont need to sign in again. If you want to sign with another account first you need to sign out");
-//        }
-
         if (signInResponse.isSuccess()){
         return new ResponseEntity(signInResponse.getMessage()+" "+signInResponse.getWebPage(), HttpStatus.OK);
         }else {

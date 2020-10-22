@@ -85,7 +85,7 @@ public class RestApiControllerTest {
     public void testAddProductGetProductsUpdateProductDeleteProduct() throws Exception {
         //addProduct
         ProductDto productDto=new ProductDto();
-        productDto.setTitle("Test");
+        productDto.setName("Test");
         productDto.setProductGroup(ProductGroup.ELECTRO);
         productDto.setPrice(new BigDecimal(20));
         productDto.setNumberOfPiecesInStock(40);
@@ -96,7 +96,7 @@ public class RestApiControllerTest {
                 andExpect(status().isCreated()).andReturn().getResponse().
                 getContentAsString();
         ProductDto returnedProductDto=objectMapper.readValue(addResult,ProductDto.class);
-        Assertions.assertEquals(productDto.getTitle(),returnedProductDto.getTitle());
+        Assertions.assertEquals(productDto.getName(),returnedProductDto.getName());
         //getProduct
         String getResult=mockMvc.perform(get("/products").
                 contentType(MediaType.APPLICATION_JSON)).
@@ -117,12 +117,12 @@ public class RestApiControllerTest {
         productDto2.setNumberOfPiecesInStock(100);
         productDto2.setPrice(new BigDecimal(100));
         productDto2.setProductGroup(ProductGroup.FURNITURE);
-        productDto2.setTitle("Test2");
+        productDto2.setName("Test2");
         String updateResult=mockMvc.perform(MockMvcRequestBuilders.put("/products/updateProduct?id=1").
                 contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productDto2))).
                 andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         ProductDto updatedProduct=objectMapper.readValue(updateResult,ProductDto.class);
-        Assertions.assertEquals(productDto2.getTitle(),updatedProduct.getTitle());
+        Assertions.assertEquals(productDto2.getName(),updatedProduct.getName());
         //deleteProduct
         String deleteProduct=mockMvc.perform(delete("/products/delete/1").
                 contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
