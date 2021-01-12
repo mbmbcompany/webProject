@@ -1,8 +1,15 @@
 package sk.bielik.webProject.entityDto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import sk.bielik.webProject.entity.Customer;
 import sk.bielik.webProject.entity.Product;
+import sk.bielik.webProject.entity.TrolleyItem;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +17,7 @@ import java.util.List;
 public class TrolleyDto {
 
     long id;
-
-    private List<Product> product =new ArrayList<>();
-
-    private Customer customer;
-
+    private  List<TrolleyItemDto> trolleyItems=new ArrayList<>();
 
     public TrolleyDto() {
     }
@@ -27,20 +30,11 @@ public class TrolleyDto {
         this.id = id;
     }
 
-    public List<Product> getProduct() {
-        return product;
+    public List<TrolleyItemDto> getTrolleyItems() {
+        return trolleyItems;
     }
 
-    public void setProduct(List<Product> product) {
-        this.product = product;
+    public void setTrolleyItems(List<TrolleyItemDto> trolleyItems) {
+        this.trolleyItems = trolleyItems;
     }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
 }

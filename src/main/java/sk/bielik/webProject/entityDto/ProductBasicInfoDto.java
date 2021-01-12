@@ -23,12 +23,6 @@ public class ProductBasicInfoDto {
 
     private ProductGroup productGroup;
 
-//    private Timestamp addedToTrolley;
-//
-//    private long numberOfPiecesInTrolley;
-
-//    private List<Trolley> trolley;
-
     public ProductBasicInfoDto() {
     }
 
@@ -80,28 +74,4 @@ public class ProductBasicInfoDto {
         this.productGroup = productGroup;
     }
 
-
-//    public List<Trolley> getTrolley() {
-//        return trolley;
-//    }
-//
-//    public void setTrolley(List<Trolley> trolley) {
-//        this.trolley = trolley;
-//    }
-//
-//    public Timestamp getAddedToTrolley() {
-//        return addedToTrolley;
-//    }
-//
-//    public void setAddedToTrolley(Timestamp addedToTrolley) {
-//        this.addedToTrolley = addedToTrolley;
-//    }
-//
-//    public long getNumberOfPiecesInTrolley() {
-//        return numberOfPiecesInTrolley;
-//    }
-//
-//    public void setNumberOfPiecesInTrolley(long numberOfPiecesInTrolley) {
-//        this.numberOfPiecesInTrolley = numberOfPiecesInTrolley;
-//    }
 }

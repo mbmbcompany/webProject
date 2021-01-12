@@ -7,8 +7,11 @@ import java.util.List;
 public interface OnlineCustomersRepository {
 
     void addOnlineCustomer(String key, Customer value);
+
     List<Customer> getOnlineCustomers();
+
     Customer getOnlineCustomerByStringId(String id);
+
     void deleteOnlineCustomer(String id);
 
 }

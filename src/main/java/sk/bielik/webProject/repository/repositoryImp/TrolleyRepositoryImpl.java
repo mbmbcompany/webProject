@@ -23,9 +23,9 @@ public class TrolleyRepositoryImpl{
 
 
     public Customer addProductToTrolley(Customer customer, Product product,long numberOfProducts) {
-      //  product.getTrolleyList().add(customer.getTrolley());
+        //  product.getTrolleyList().add(customer.getTrolley());
         TrolleyItem trolleyItem=new TrolleyItem();
-        trolleyItem.setTrolley(customer.getTrolley());
+        // trolleyItem.setTrolley(customer.getTrolley());
         trolleyItem.setProduct(product);
         trolleyItem.setNumberOfPieces(numberOfProducts);
         customer.getTrolley().getTrolleyItems().add(trolleyItem);
@@ -33,11 +33,24 @@ public class TrolleyRepositoryImpl{
     }
 
 
-    public void deleteProductFromTrolley(Customer customer,TrolleyItem trolleyItem) {
-        List<TrolleyItem> productList=customer.getTrolley().getTrolleyItems();
-        productList.remove(trolleyItem);
-    }
+    public void deleteProductFromTrolley(Customer customer,Long trolleyItemId) {
+        if (trolleyItemId == null) {
+            customer.getTrolley().getTrolleyItems().removeAll(customer.getTrolley().getTrolleyItems());
+        } else {
+            List<TrolleyItem> trolleyItems=customer.getTrolley().getTrolleyItems();
+            TrolleyItem trolleyItem=null;
+            for (TrolleyItem item:trolleyItems){
+                if (item.getId()==trolleyItemId){
+                    trolleyItem=item;
+                }
+            }
+            if (trolleyItem==null){
+                throw new NullPointerException("Item with thiis id is not in the trolley");
+            }
 
+            customer.getTrolley().getTrolleyItems().remove(trolleyItem);
+        }
+    }
 
     public boolean buyProducts(Customer customer) {
         List<TrolleyItem> productList=customer.getTrolley().getTrolleyItems();
@@ -52,6 +65,14 @@ public class TrolleyRepositoryImpl{
 
 
     public Trolley addTrolleyToDatabase(Trolley trolley) {
-        return trolleyRepository.addTrolleyToDatabase(trolley);
+        return trolleyRepository.save(trolley);
+    }
+
+    public void deleteItemFromTrolleyByItemOrder(Customer customer,int item) throws Exception {
+        if (item<1 || item>customer.getTrolley().getTrolleyItems().size()+1){
+            throw new Exception("Invalid index");
+        }else {
+            customer.getTrolley().getTrolleyItems().remove(item-1);
+        }
     }
 }

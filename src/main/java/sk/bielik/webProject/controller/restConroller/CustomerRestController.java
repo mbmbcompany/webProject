@@ -37,12 +37,4 @@ public class CustomerRestController {
         return new ResponseEntity(customerWithoutPasswordDtoList,HttpStatus.OK);
 
     }
-
-//    @GetMapping("/onlineCustomers")
-//    public ResponseEntity getOnlineCustomerByNickNameApi(@RequestParam("nickName") String nickName){
-//        CustomerWithoutPasswordDto customerWithoutPasswordDto=customerService.getOnlineCustomerByNickName(nickName);
-//        return new ResponseEntity(customerWithoutPasswordDto,HttpStatus.OK);
-//    }
-
-
 }

@@ -41,13 +41,6 @@ public class SignInOutServiceImpl implements SignInOutService {
             int calcul = 0;
             long id=0;
 
-//        ListIterator iterator=customerList.listIterator();
-//        while (iterator.hasNext()){
-//            Customer compare=(Customer) iterator.next();
-//            if (compare.getNickName()==signInRequest.getNickName() && compare.getPassword()==signInRequest.getPassword()){
-//                calcul++;
-//            }
-//        }
             if (signInRequest.getNickName() == null || signInRequest.getPassword() == null) {
                 return new SignInResponse(false, "Both nickname and password need to be fill in", "Sending sign in webpage.");
             }
@@ -63,8 +56,8 @@ public class SignInOutServiceImpl implements SignInOutService {
 
             if (calcul == 1) {
                 session.setAttribute("userNickName",signInRequest.getNickName());
-                CustomerDto customerWithoutPasswordDto = customerService.addOnlineCustomer(id, result);
-                if (customerWithoutPasswordDto != null) {
+                CustomerDto customerDto = customerService.addOnlineCustomer(id, result);
+                if (customerDto != null) {
                     System.out.println("You are signed in as " + signInRequest.getNickName());
                     return new SignInResponse(true, "Hello " + session.getAttribute("userNickName") + " . You signed in successfully", "Sending you main webpage.");
                 } else {
@@ -100,8 +93,8 @@ public class SignInOutServiceImpl implements SignInOutService {
     @Override
     public SignInResponse signOut() {
         if (session.getAttribute("userNickName")!=null) {
-            CustomerDto customerWithoutPasswordDto= customerService.getCustomerByNickName(session.getAttribute("userNickName").toString());
-            customerService.deleteOnlineCustomerByStringId(customerWithoutPasswordDto.getId()+"");
+            CustomerDto customerDto= customerService.getCustomerByNickName(session.getAttribute("userNickName").toString());
+            customerService.deleteOnlineCustomerByStringId(customerDto.getId()+"");
             session.invalidate();
             return new SignInResponse(true, "You were successfully signed out", "Sending sign in web page");
         }else {

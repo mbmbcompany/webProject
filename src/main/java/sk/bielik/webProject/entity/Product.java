@@ -1,22 +1,14 @@
 package sk.bielik.webProject.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import sk.bielik.webProject.converter.ProductGroupConverter;
 import sk.bielik.webProject.entity.enums.ProductGroup;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Product {
@@ -33,18 +25,8 @@ public class Product {
 
     private String description;
 
-//    private Timestamp addedToTrolley;
-//
-//    private long numberOfPiecesInTrolley;
-
-
     @Convert(converter = ProductGroupConverter.class)
     private ProductGroup productGroup;
-
-//    @ManyToMany(mappedBy = "product")
-//    @JsonManagedReference
-//    private List<Trolley> trolley;
-
 
     public Product() {
     }
@@ -97,27 +79,4 @@ public class Product {
         this.productGroup = productGroup;
     }
 
-//    public List<Trolley> getTrolley() {
-//        return trolley;
-//    }
-//
-//    public void setTrolley(List<Trolley> trolley) {
-//        this.trolley = trolley;
-//    }
-//
-//    public Timestamp getAddedToTrolley() {
-//        return addedToTrolley;
-//    }
-//
-//    public void setAddedToTrolley(Timestamp addedToTrolley) {
-//        this.addedToTrolley = addedToTrolley;
-//    }
-//
-//    public long getNumberOfPiecesInTrolley() {
-//        return numberOfPiecesInTrolley;
-//    }
-//
-//    public void setNumberOfPiecesInTrolley(long numberOfPiecesInTrolley) {
-//        this.numberOfPiecesInTrolley = numberOfPiecesInTrolley;
-//    }
 }

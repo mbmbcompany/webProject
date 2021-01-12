@@ -11,12 +11,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import sk.bielik.webProject.entity.Credentials;
+import sk.bielik.webProject.entity.enums.OrderStage;
 import sk.bielik.webProject.entity.enums.ProductGroup;
-import sk.bielik.webProject.entityDto.CustomerDto;
-import sk.bielik.webProject.entityDto.CustomerWithoutPasswordDto;
-import sk.bielik.webProject.entityDto.ProductDto;
+import sk.bielik.webProject.entityDto.*;
+import sk.bielik.webProject.request.AddProductToTrolleyRequest;
 import sk.bielik.webProject.request.RegistrationRequest;
 import sk.bielik.webProject.request.SignInRequest;
+import sk.bielik.webProject.response.AddProductToTrolleyResponse;
+import sk.bielik.webProject.service.serviceImpl.BuyingOrderServiceImpl;
+import sk.bielik.webProject.service.serviceImpl.CustomerServiceImpl;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -34,6 +38,10 @@ public class RestApiControllerTest {
     MockMvc mockMvc;
     @Autowired
     HttpSession session;
+    @Autowired
+    CustomerServiceImpl customerService;
+    @Autowired
+    BuyingOrderServiceImpl buyingOrderService;
 
     private final ObjectMapper objectMapper=new ObjectMapper();
 
@@ -41,44 +49,59 @@ public class RestApiControllerTest {
     public void testCustomerRestRegistrationRestSignInOutRestController() throws Exception {
 
         CustomerDto customerDto=new CustomerDto();
-        customerDto.setName("Test");
+        Credentials credentials=new Credentials();
+        customerDto.setCredentials(credentials);
+        customerDto.getCredentials().setFirstName("Test");
         customerDto.setNickName("Test");
-        customerDto.setEmail("Test");
+        customerDto.getCredentials().setEmail("Test");
         customerDto.setPassword("TestTest");
-        customerDto.setAdress("Test");
-        customerDto.setPhone_number("Test");
-        customerDto.setSurename("Test");
+        customerDto.getCredentials().setAdress("Test");
+        customerDto.getCredentials().setPhone_number("Test");
+        customerDto.getCredentials().setSurename("Test");
         String passwordVerif="TestTest";
         RegistrationRequest request=new RegistrationRequest(customerDto,passwordVerif);
-        String returned=mockMvc.perform(post("/registration").
+
+        String returnedRegistration=mockMvc.perform(post("/registration").
                 contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(request))).
                 andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
-        Assertions.assertEquals(returned,"Hello Test ,you have been successfully registered Sending main web page.");
+        Assertions.assertEquals(returnedRegistration,"Hello Test ,you have been successfully registered Sending main web page.");
 
-        String result=mockMvc.perform(get("/customers").
+        String returnedCustomers=mockMvc.perform(get("/customers").
                 contentType(MediaType.APPLICATION_JSON)).
                 andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-       List<CustomerWithoutPasswordDto> customerWithoutPasswordDtoList= objectMapper.readValue(result, new TypeReference<List<CustomerWithoutPasswordDto>>() {});
-       Assertions.assertEquals(customerDto.getNickName(),customerWithoutPasswordDtoList.get(0).getNickName());
+       List<CustomerWithoutPasswordDto> customerWithoutPasswordDtoList= objectMapper.readValue(returnedCustomers, new TypeReference<List<CustomerWithoutPasswordDto>>() {});
+       Assertions.assertEquals(customerDto.getCredentials().getPhone_number(),customerWithoutPasswordDtoList.get(customerWithoutPasswordDtoList.size()-1).getCredentials().getPhone_number());
 
         SignInRequest signInRequest=new SignInRequest();
         signInRequest.setNickName(customerDto.getNickName());
         signInRequest.setPassword(customerDto.getPassword());
-        String cameBack=mockMvc.perform(post("/sign/in").
+        String returnedSignIn=mockMvc.perform(post("/sign/in").
                 content(objectMapper.writeValueAsString(signInRequest)).
                 contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
                 andReturn().getResponse().getContentAsString();
-        Assertions.assertEquals(cameBack,"Hello Test . You signed in successfully Sending you main webpage.");
+        Assertions.assertEquals(returnedSignIn,"Hello Test . You signed in successfully Sending you main webpage.");
 
         String returnedListOfOnlineUsers=mockMvc.perform(get("/customers/onlineCustomers").
                 contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
                 andReturn().getResponse().getContentAsString();
-        List<CustomerWithoutPasswordDto> customerWithoutPasswordDtoList1=objectMapper.readValue(returnedListOfOnlineUsers, new TypeReference<List<CustomerWithoutPasswordDto>>() {});
-        Assertions.assertEquals(signInRequest.getNickName(),customerWithoutPasswordDtoList1.get(0).getNickName());
+        List<CustomerWithoutPasswordDto> returnedCustomerWithoutPasswordDtoList=objectMapper.readValue(returnedListOfOnlineUsers, new TypeReference<List<CustomerWithoutPasswordDto>>() {});
+        Assertions.assertEquals(signInRequest.getNickName(),returnedCustomerWithoutPasswordDtoList.get(returnedCustomerWithoutPasswordDtoList.size()-1).getNickName());
 
-//        String returnedOutResponse=mockMvc.perform(get("/sign/out").
-//                contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
-//                andReturn().getResponse().getContentAsString();
+        //addProduct
+        ProductDto productDto=new ProductDto();
+        productDto.setName("Test");
+        productDto.setProductGroup(ProductGroup.ELECTRO);
+        productDto.setPrice(new BigDecimal(20));
+        productDto.setNumberOfPiecesInStock(40);
+        productDto.setDescription("Test");
+        String addResult=mockMvc.perform(post("/products/addProduct").
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(productDto))).
+                andExpect(status().isCreated()).andReturn().getResponse().
+                getContentAsString();
+        ProductDto returnedProductDto=objectMapper.readValue(addResult,ProductDto.class);
+        Assertions.assertEquals(productDto.getName(),returnedProductDto.getName());
+
     }
 
     @Test
@@ -111,7 +134,6 @@ public class RestApiControllerTest {
         Assertions.assertEquals(returnedProductDto.getId(),productDtos.get(0).getId());
         Assertions.assertEquals(productDtos.get(0).getId(),productDto1.getId());
         //updateProduct
-
         ProductDto productDto2=new ProductDto();
         productDto2.setDescription("Test2");
         productDto2.setNumberOfPiecesInStock(100);
@@ -128,5 +150,26 @@ public class RestApiControllerTest {
                 contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).
                 andReturn().getResponse().getContentAsString();
         Assertions.assertEquals("Product with id:1 was successfully deleted. ",deleteProduct);
+    }
+
+    @Test
+    public void BuyingOrderRestControllerTest() throws Exception {
+
+        InvoiceDto invoiceDto=new InvoiceDto();
+        invoiceDto.setPriceWithoutVAT(55.23);
+        BuyingOrderDto buyingOrderDto=new BuyingOrderDto();
+        buyingOrderDto.setInvoice(invoiceDto);
+        buyingOrderDto.setPayment(true);
+        buyingOrderDto.setStageOfOrder(OrderStage.ORDERED);
+        BuyingOrderDto returnedBuyingOrderDto= buyingOrderService.save(buyingOrderDto);
+        String mockedFindBuyingOrder= mockMvc.perform(get("/buyingOrder/"+returnedBuyingOrderDto.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        BuyingOrderDto mockBuyingOrder=objectMapper.readValue(mockedFindBuyingOrder,BuyingOrderDto.class);
+        Assertions.assertEquals(returnedBuyingOrderDto.getId(),mockBuyingOrder.getId());
+
+    }
+
+    @Test
+    public void TrolleyRestControllerTest(){
+
     }
 }

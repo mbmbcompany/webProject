@@ -66,13 +66,18 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductBasicInfoDto> getAllProductsOrderedByPrice(@NotNull boolean fromLowest) {
         List<ProductBasicInfoDto> productDtos=productRepository.getAllProducts().stream().map(product -> productMapper.mapProductToProductBasicInfoDto(product)).collect(Collectors.toList());
         if (fromLowest){
-             productDtos.sort(Comparator.comparing(ProductBasicInfoDto::getPrice));
-             return productDtos;
+            productDtos.sort(Comparator.comparing(ProductBasicInfoDto::getPrice));
+            return productDtos;
         }else {
             Comparator<ProductBasicInfoDto> salaryComparator = Comparator.comparing(ProductBasicInfoDto::getPrice);
             productDtos.sort(salaryComparator.reversed());
             return productDtos;
         }
 
+    }
+
+    @Override
+    public ProductDto save(ProductDto productDto) {
+        return productMapper.mapProductToProductDto(productRepository.addProduct(productMapper.mapProductDtoToProduct(productDto)));
     }
 }

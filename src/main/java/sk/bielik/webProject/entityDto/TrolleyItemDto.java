@@ -1,21 +1,22 @@
-package sk.bielik.webProject.entity;
+package sk.bielik.webProject.entityDto;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import sk.bielik.webProject.entity.Product;
+import sk.bielik.webProject.entity.Trolley;
+
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.sql.Timestamp;
-@Entity
-public class TrolleyItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class TrolleyItemDto {
+
     private long id;
-    @OneToOne
-    private Product product;
+
+    private ProductDto product;
 
     private long numberOfPieces;
 
     private Timestamp addingTime;
-
-    public TrolleyItem() {
-    }
 
     public long getId() {
         return id;
@@ -25,11 +26,11 @@ public class TrolleyItem {
         this.id = id;
     }
 
-    public Product getProduct() {
+    public ProductDto getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductDto product) {
         this.product = product;
     }
 

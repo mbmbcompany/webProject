@@ -1,13 +1,10 @@
 package sk.bielik.webProject.service.serviceImpl;
 
 import org.springframework.stereotype.Service;
-import sk.bielik.webProject.entity.Trolley;
 import sk.bielik.webProject.entityDto.*;
 import sk.bielik.webProject.request.*;
 import sk.bielik.webProject.response.*;
-import sk.bielik.webProject.service.*;
 import sk.bielik.webProject.service.RegistrationService;
-
 import java.util.List;
 import java.util.ListIterator;
 
@@ -16,17 +13,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final CustomerServiceImpl customerService;
 
-    private final CustomerMapperImpl customerMapper;
-
-    private final TrolleyServiceImpl trolleyService;
-
-    private final TrolleyMapperImpl trolleyMapper;
-
-    public RegistrationServiceImpl(CustomerServiceImpl customerService, CustomerMapperImpl customerMapper, TrolleyServiceImpl trolleyService, TrolleyMapperImpl trolleyMapper) {
+    public RegistrationServiceImpl(CustomerServiceImpl customerService) {
         this.customerService = customerService;
-        this.customerMapper = customerMapper;
-        this.trolleyService = trolleyService;
-        this.trolleyMapper = trolleyMapper;
     }
 
     @Override
@@ -34,11 +22,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         if (registrationRequest.getCustomerDto().getNickName()==null ||
                 registrationRequest.getCustomerDto().getPassword()==null ||
-                registrationRequest.getCustomerDto().getName()==null ||
-                registrationRequest.getCustomerDto().getAdress()==null ||
-                registrationRequest.getCustomerDto().getEmail()==null ||
-                registrationRequest.getCustomerDto().getPhone_number()==null ||
-                registrationRequest.getCustomerDto().getSurename()==null ||
+                registrationRequest.getCustomerDto().getCredentials().getFirstName()==null ||
+                registrationRequest.getCustomerDto().getCredentials().getAdress()==null ||
+                registrationRequest.getCustomerDto().getCredentials().getEmail()==null ||
+                registrationRequest.getCustomerDto().getCredentials().getPhone_number()==null ||
+                registrationRequest.getCustomerDto().getCredentials().getSurename()==null ||
                 registrationRequest.getPasswordVerif()==null){
             return new RegistrationResponse(false,"All fields need to be filled in.","Sending registration web page.");
         }
@@ -68,18 +56,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             return new RegistrationResponse(false,"Error","Sending registration web page.");
         }
         if (calcul<1){
-            Trolley trolley=new Trolley();
-            TrolleyDto trolleyDto=trolleyService.addTrolleyToDatabase(trolleyMapper.mapTrolleyToTrolleyDto(trolley));
+            TrolleyDto trolleyDto=new TrolleyDto();
             CustomerDto customerDto=registrationRequest.getCustomerDto();
-            //customerService.saveCustomer(customerDto);
-           // CustomerDto customerDto1=customerService.saveCustomer(customerDto);
-
-            trolleyDto.setCustomer(customerMapper.mapCustomerDtoToCustomer(customerDto));
-            //trolleyService.addTrolleyToDatabase(trolleyMapper.mapTrolleyToTrolleyDto(trolley));
-            customerDto.setTrolley(trolley);
+            customerDto.setTrolley(trolleyDto);
             customerService.saveCustomer(customerDto);
-
-
             return new RegistrationResponse(true,"Hello "+registrationRequest.getCustomerDto().getNickName()+" ,you have been successfully registered","Sending main web page.");
         }
 

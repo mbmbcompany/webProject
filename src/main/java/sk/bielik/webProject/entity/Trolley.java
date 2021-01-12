@@ -14,29 +14,11 @@ public class Trolley {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @OneToOne(mappedBy ="trolley")
-    @JsonBackReference
-    private Customer customer;
-    @OneToMany(mappedBy = "trolley",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
     private  List<TrolleyItem> trolleyItems=new ArrayList<>();
-
-
-//toto zmenit na ManyToMany a do pomocnej tabulky pridat stlpce ako cas pridania a pocet kusov
-//    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    @JsonBackReference
-//    private List<Product> product =new ArrayList<>();
 
     public Trolley() {
     }
-//
-//    public List<Product> getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(List<Product> product) {
-//        this.product = product;
-//    }
 
     public long getId() {
         return id;
@@ -44,14 +26,6 @@ public class Trolley {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public List<TrolleyItem> getTrolleyItems() {

@@ -20,4 +20,6 @@ public interface ProductService {
     ProductDto updateProduct(long id, ProductDto productDto);
 
     List<ProductBasicInfoDto> getAllProductsOrderedByPrice(boolean fromHighest);
+
+    ProductDto save(ProductDto productDto);
 }
