@@ -168,8 +168,4 @@ public class RestApiControllerTest {
 
     }
 
-    @Test
-    public void TrolleyRestControllerTest(){
-
-    }
 }
