@@ -14,7 +14,8 @@ public class Trolley {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = false,fetch = FetchType.EAGER)
     private  List<TrolleyItem> trolleyItems=new ArrayList<>();
 
     public Trolley() {

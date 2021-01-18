@@ -5,6 +5,8 @@ import sk.bielik.webProject.entity.Trolley;
 
 import javax.persistence.Embedded;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InvoiceDto {
 
@@ -16,7 +18,8 @@ public class InvoiceDto {
 
     private double priceWithVAT;
 
-    private TrolleyDto  trolley;
+    //private TrolleyDto  trolley;
+    private List<TrolleyItemDto> trolleyItems=new ArrayList<>();
 
     public InvoiceDto() {
     }
@@ -53,11 +56,20 @@ public class InvoiceDto {
         this.priceWithVAT = priceWithVAT;
     }
 
-    public TrolleyDto  getTrolley() {
-        return trolley;
+//    public TrolleyDto  getTrolley() {
+//        return trolley;
+//    }
+//
+//    public void setTrolley(TrolleyDto  trolley) {
+//        this.trolley = trolley;
+//    }
+
+    public List<TrolleyItemDto> getTrolleyItems() {
+        return trolleyItems;
     }
 
-    public void setTrolley(TrolleyDto  trolley) {
-        this.trolley = trolley;
+    public void setTrolleyItems(List<TrolleyItemDto> trolleyItems) {
+        this.trolleyItems = trolleyItems;
     }
+
 }

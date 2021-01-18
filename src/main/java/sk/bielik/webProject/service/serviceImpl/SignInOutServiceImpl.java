@@ -21,9 +21,6 @@ public class SignInOutServiceImpl implements SignInOutService {
 
     private final CustomerServiceImpl customerService;
 
-    private final ObjectMapper objectMapper=new ObjectMapper();
-
-
 
     public SignInOutServiceImpl(CustomerRepositoryImpl customerRepository, HttpSession session, CustomerServiceImpl customerService) {
         this.customerRepository = customerRepository;

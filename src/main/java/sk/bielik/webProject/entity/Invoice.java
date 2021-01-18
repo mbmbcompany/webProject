@@ -1,6 +1,9 @@
 package sk.bielik.webProject.entity;
 
+import sk.bielik.webProject.entityDto.TrolleyDto;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,8 +17,10 @@ public class Invoice {
     private double priceWithoutVAT;
 
     private double priceWithVAT;
-    @OneToOne(fetch = FetchType.EAGER)
-    private Trolley trolley;
+//    @OneToOne(fetch = FetchType.EAGER)
+//    private Trolley trolley;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<TrolleyItem> trolleyItems=new ArrayList<>();
 
     public Invoice() {
     }
@@ -51,12 +56,20 @@ public class Invoice {
     public void setPriceWithVAT(double priceWithVAT) {
         this.priceWithVAT = priceWithVAT;
     }
+//
+//    public Trolley getTrolley() {
+//        return trolley;
+//    }
+//
+//    public void setTrolley(Trolley trolley) {
+//        this.trolley = trolley;
+//    }
 
-    public Trolley getTrolley() {
-        return trolley;
+    public List<TrolleyItem> getTrolleyItems() {
+        return trolleyItems;
     }
 
-    public void setTrolley(Trolley trolley) {
-        this.trolley = trolley;
+    public void setTrolleyItems(List<TrolleyItem> trolleyItems) {
+        this.trolleyItems = trolleyItems;
     }
 }

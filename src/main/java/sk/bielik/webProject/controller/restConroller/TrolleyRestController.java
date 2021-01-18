@@ -3,6 +3,7 @@ package sk.bielik.webProject.controller.restConroller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import sk.bielik.webProject.entity.TrolleyItem;
 import sk.bielik.webProject.entityDto.BuyingOrderDto;
@@ -51,6 +52,7 @@ public class TrolleyRestController {
         return new ResponseEntity("Item was deleted",HttpStatus.OK);
     }
 
+    @Transactional
     @GetMapping("/buyProducts")
     public ResponseEntity buyProducts(HttpServletResponse response){
         BuyingOrderDto buyingOrderDto=trolleyService.buyProducts(response);

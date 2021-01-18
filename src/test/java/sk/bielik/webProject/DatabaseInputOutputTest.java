@@ -9,14 +9,14 @@ import sk.bielik.webProject.entity.enums.OrderStage;
 import sk.bielik.webProject.entity.enums.ProductGroup;
 import sk.bielik.webProject.entityDto.*;
 import sk.bielik.webProject.service.CustomerMapperImpl;
-import sk.bielik.webProject.service.serviceImpl.BuyingOrderServiceImpl;
-import sk.bielik.webProject.service.serviceImpl.CustomerServiceImpl;
+import sk.bielik.webProject.service.serviceImpl.*;
 import org.junit.jupiter.api.Assertions;
-import sk.bielik.webProject.service.serviceImpl.ProductServiceImpl;
-import sk.bielik.webProject.service.serviceImpl.TrolleyServiceImpl;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootTest
@@ -32,7 +32,8 @@ public class DatabaseInputOutputTest {
     CustomerMapperImpl customerMapper;
     @Autowired
     ProductServiceImpl productService;
-
+    @Autowired
+    InvoiceServiceImpl invoiceService;
 
     @Test
     public void savedCustomerToDbIsSameAsFoundCustomerFromDbById(){
@@ -64,16 +65,48 @@ public class DatabaseInputOutputTest {
 
 
     @Test
-    public void savedBuingOrderToDbIsSameAsFoundBuyingOrderFromDbById(){
+    public void savedBuyingOrderToDbIsSameAsFoundBuyingOrderFromDbById(){
+
+        ProductDto productDto=new ProductDto();
+        productDto.setName("TestProduct");
+        productDto.setProductGroup(ProductGroup.GROCERY);
+        productDto.setPrice(new BigDecimal(65));
+        productDto.setDescription("TestProduct");
+        productDto.setNumberOfPiecesInStock(100);
+        ProductDto productDto1=productService.save(productDto);
+        TrolleyItemDto trolleyItemDto= new TrolleyItemDto();
+        trolleyItemDto.setNumberOfPieces(5);
+        trolleyItemDto.setAddingTime(Timestamp.from(Instant.now()));
+        trolleyItemDto.setProduct(productDto1);
+        List<TrolleyItemDto> trolleyItemDtoList=new ArrayList<>();
+        trolleyItemDtoList.add(trolleyItemDto);
+        Credentials credentials=new Credentials();
+        credentials.setEmail("test@test.sk");
+        credentials.setFirstName("Test");
+        credentials.setAdress("TestAdress");
+        credentials.setBankAccount("testAccount");
+        credentials.setSurename("Test");
+        credentials.setPhone_number("testNumber");
+        TrolleyDto trolleyDto=new TrolleyDto();
+        trolleyDto.setTrolleyItems(trolleyItemDtoList);
+        CustomerDto customerDto= new CustomerDto();
+        customerDto.setCredentials(credentials);
+        customerDto.setNickName("Test");
+        customerDto.setTrolley(trolleyDto);
+        CustomerDto customerDto1=customerService.saveCustomer(customerDto);
         InvoiceDto invoiceDto=new InvoiceDto();
         invoiceDto.setPriceWithoutVAT(55.23);
+        invoiceDto.setTrolleyItems(customerDto1.getTrolley().getTrolleyItems());
+        invoiceDto.setPriceWithVAT(456);
+        invoiceDto.setCredentials(credentials);
         BuyingOrderDto buyingOrderDto=new BuyingOrderDto();
         buyingOrderDto.setInvoice(invoiceDto);
-        buyingOrderDto.setPayment(true);
+        buyingOrderDto.setPayment(false);
         buyingOrderDto.setStageOfOrder(OrderStage.ORDERED);
         BuyingOrderDto returnedBuyingOrderDto=buyingOrderService.save(buyingOrderDto);
         BuyingOrderDto foundByIdBuyingOrder=buyingOrderService.findById(returnedBuyingOrderDto.getId());
         Assertions.assertEquals(returnedBuyingOrderDto.getId(),foundByIdBuyingOrder.getId());
+        Assertions.assertEquals(buyingOrderDto.getInvoice().getTrolleyItems().get(buyingOrderDto.getInvoice().getTrolleyItems().size()-1).getId(),returnedBuyingOrderDto.getInvoice().getTrolleyItems().get(returnedBuyingOrderDto.getInvoice().getTrolleyItems().size()-1).getId());
     }
 
     @Test

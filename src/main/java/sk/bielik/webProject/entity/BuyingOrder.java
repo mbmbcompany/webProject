@@ -11,7 +11,7 @@ public class BuyingOrder {
     private long id;
 
     private boolean payment;
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = false)
+    @OneToOne(cascade = CascadeType.ALL)
     private Invoice invoice;
     @Enumerated(EnumType.STRING)
     private OrderStage stageOfOrder;

@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,15 +28,11 @@ public class TrolleyServiceImpl implements TrolleyService{
 
     private final ProductServiceImpl productService;
 
-    private final ProductMapperImpl productMapper;
-
     private final CustomerMapperImpl customerMapper;
 
     private final TrolleyRepositoryImpl trolleyRepository;
 
     private final TrolleyMapperImpl trolleyMapper;
-
-    private final ObjectMapper objectMapper;
 
     private final HttpSession session;
 
@@ -45,30 +40,23 @@ public class TrolleyServiceImpl implements TrolleyService{
 
     private final BuyingOrderServiceImpl buyingOrderService;
 
-    private final BuyingOrderMapperImpl buyingOrderMapper;
-
-    private final CustomerRepositoryImpl customerRepository;
-
     private final TrolleyItemMapperImpl trolleyItemMapper;
 
 
 
 
-    public TrolleyServiceImpl(CustomerServiceImpl customerService, ProductServiceImpl productService, ProductMapperImpl productMapper, CustomerMapperImpl customerMapper, TrolleyRepositoryImpl trolleyRepository, TrolleyMapperImpl trolleyMapper, ObjectMapper objectMapper, HttpSession session, CookieServiceImpl cookieService, BuyingOrderServiceImpl buyingOrderService, BuyingOrderMapperImpl buyingOrderMapper,  CustomerRepositoryImpl customerRepository, TrolleyItemMapperImpl trolleyItemMapper) {
+
+    public TrolleyServiceImpl(CustomerServiceImpl customerService, ProductServiceImpl productService, CustomerMapperImpl customerMapper, TrolleyRepositoryImpl trolleyRepository, TrolleyMapperImpl trolleyMapper, HttpSession session, CookieServiceImpl cookieService, BuyingOrderServiceImpl buyingOrderService, TrolleyItemMapperImpl trolleyItemMapper) {
 
 
         this.customerService = customerService;
         this.productService = productService;
-        this.productMapper = productMapper;
         this.customerMapper = customerMapper;
         this.trolleyRepository = trolleyRepository;
         this.trolleyMapper = trolleyMapper;
-        this.objectMapper = objectMapper;
         this.session = session;
         this.cookieService = cookieService;
         this.buyingOrderService = buyingOrderService;
-        this.buyingOrderMapper = buyingOrderMapper;
-        this.customerRepository = customerRepository;
         this.trolleyItemMapper = trolleyItemMapper;
     }
 
@@ -168,18 +156,16 @@ public class TrolleyServiceImpl implements TrolleyService{
             priceWithVat = priceWithVat.add(item.getProduct().getPrice().multiply(new BigDecimal(item.getNumberOfPieces())));
         }
         invoiceDto.setCredentials(customerDto.getCredentials());
-        invoiceDto.setTrolley(customerDto.getTrolley());
+        invoiceDto.getTrolleyItems().addAll(customerDto.getTrolley().getTrolleyItems());
         invoiceDto.setPriceWithVAT(priceWithVat.doubleValue());
         invoiceDto.setPriceWithoutVAT(priceWithVat.doubleValue()*0.88);
         buyingOrderDto1.setInvoice(invoiceDto);
         buyingOrderDto1.setPayment(false);
         buyingOrderDto1.setStageOfOrder(OrderStage.ORDERED);
         BuyingOrderDto buyingOrderDto=buyingOrderService.save(buyingOrderDto1);
-        Customer customer=customerMapper.mapCustomerDtoToCustomer(customerDto);
-        customer.getTrolley().getTrolleyItems().removeAll(customer.getTrolley().getTrolleyItems());
-        customerRepository.saveCustomer(customer);
+        customerDto.getTrolley().getTrolleyItems().removeAll(customerDto.getTrolley().getTrolleyItems());
+        customerService.saveCustomer(customerDto);
         cookieService.terminateCookie("trolley",response);
-        buyingOrderService.save(buyingOrderDto);
         return buyingOrderDto;
     }
 
